@@ -8,7 +8,6 @@ const translations = {
 
         clickVillage:
             "Click on a village marker to see details",
-
         traditions: "Traditions",
         festivals: "Festivals",
         crafts: "Crafts",
@@ -29,11 +28,11 @@ const translations = {
         mapConfigHint:
             "Copy .env.example to .env and add a free key from maptiler.com",
         location: "Location",
-        tags: "Tags"
+        tags: "Tags",
 
         trailsTitle: "Heritage Trails & Local Hosts",
         trailsDesc: "Plan responsible visits to villages, meet cultural hosts, and support local artisans",
-        trailDetailsTitle: "Trail Details"
+        trailDetailsTitle: "Trail Details",
 
     },
 
@@ -104,7 +103,7 @@ trailDetailsTitle: "ट्रेल विवरण",
         mapConfigHint:
             ".env.example ला .env मध्ये कॉपी करा आणि maptiler.com वरून विनामूल्य की जोडा",
         location: "स्थान",
-        tags: "टॅग"
+        tags: "टॅग",
 
         trailsTitle: "वारसा ट्रेल्स आणि स्थानिक होस्ट",
         trailsDesc: "गावांना जबाबदारीने भेट द्या आणि कलाकारांना भेटा",
