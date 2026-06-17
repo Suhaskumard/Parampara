@@ -7,24 +7,19 @@ let ambientSoundEnabled = true;
 let currentSound = null;
 let heatmapMarkers = [];
 
-let currentLanguage = localStorage.getItem('language') || 'en';
+let currentLanguage =
+  localStorage.getItem('parampara_lang') ||
+  localStorage.getItem('language') ||
+  'en';
 
 document.addEventListener('DOMContentLoaded', () => {
   const selector = document.getElementById('language-selector');
   selector.value = currentLanguage;
 
-  // selector.addEventListener("change", (e) => {
-  //     currentLanguage = e.target.value;
-  //     localStorage.setItem("language", currentLanguage);
-
-  //     // Re-apply language labels on existing style
-  //     setMapLanguage(currentLanguage);
-  //     addVillageMarkers(); // re-render markers with new language
-  //     translatePage();
-  // });
   selector.addEventListener('change', (e) => {
     currentLanguage = e.target.value;
 
+    localStorage.setItem('parampara_lang', currentLanguage);
     localStorage.setItem('language', currentLanguage);
 
     if (map && map.isStyleLoaded()) {
@@ -562,3 +557,23 @@ if (backToTopBtn) {
     });
   });
 }
+
+// ── Re-render map and elements when language changes globally
+window.addEventListener('parampara:langchange', (e) => {
+  const newLang = e.detail.lang;
+  if (currentLanguage === newLang) return;
+  currentLanguage = newLang;
+
+  const selector = document.getElementById('language-selector');
+  if (selector) selector.value = currentLanguage;
+
+  if (map && map.isStyleLoaded()) {
+    setMapLanguage(currentLanguage);
+  }
+
+  if (map) {
+    addVillageMarkers();
+  }
+
+  translatePage();
+});
