@@ -1,4 +1,7 @@
-let currentLanguage = localStorage.getItem('language') || 'en';
+let currentLanguage =
+  localStorage.getItem('parampara_lang') ||
+  localStorage.getItem('language') ||
+  'en';
 
 function t(key) {
   return translations[currentLanguage][key] || key;

@@ -136,6 +136,7 @@
     mapSel.addEventListener('change', function () {
       var chosen = this.value;
       localStorage.setItem(STORAGE_KEY, chosen);
+      localStorage.setItem('language', chosen);
       applyTranslations(chosen);
       var globalSel = document.getElementById('global-lang-selector');
       if (globalSel) globalSel.value = chosen;
