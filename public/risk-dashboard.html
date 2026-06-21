@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Discover villages and their unique traditions, festivals, and crafts on the Parampara interactive cultural map"
+      content="Monitor and preserve traditions, crafts, and heritage items at risk of disappearing. Help direct conservation efforts."
     />
-    <title>Cultural Map - Parampara</title>
+    <title>Risk Monitoring Dashboard - Parampara</title>
     <link rel="stylesheet" href="styles/main.css" />
-    <link rel="stylesheet" href="styles/map.css" />
-    <!-- <link rel="stylesheet" href="styles/languageSelector.css" /> -->
-
-    <link
-      href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="styles/risk-dashboard.css" />
     <link rel="stylesheet" href="styles/languageSelector.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@tabler/icons-webfont@latest/tabler-icons.min.css"
+    />
   </head>
-  <body>   
+  <body>
+    <!-- Navigation -->
     <nav class="navbar">
       <div class="nav-container">
         <div class="logo">
@@ -27,7 +26,6 @@
             Preserving Living Traditions
           </p>
         </div>
-
         <button
           class="hamburger"
           id="hamburgerBtn"
@@ -42,9 +40,7 @@
             <a href="index.html"><i class="ti ti-home"></i> Home</a>
           </li>
           <li>
-            <a href="map.html" class="active"
-              ><i class="ti ti-map-2"></i> Explore Map</a
-            >
+            <a href="map.html"><i class="ti ti-map-2"></i> Explore Map</a>
           </li>
           <li>
             <a href="gallery.html"><i class="ti ti-photo"></i> Gallery</a>
@@ -68,7 +64,7 @@
             >
           </li>
           <li>
-            <a href="risk-dashboard.html"
+            <a href="risk-dashboard.html" class="active"
               ><i class="ti ti-alert-triangle"></i>
               <span data-i18n="nav_risk">Risk Dashboard</span></a
             >
@@ -95,58 +91,80 @@
       </div>
     </nav>
 
-    <main class="map-container">
-      <div class="map-header">
-        <h2 data-i18n="map_title">
-          Digital Time-Travel: Explore Rural Heritage
+    <!-- Main Content -->
+    <main class="dashboard-container">
+      <div class="dashboard-header">
+        <h2 data-i18n="risk_title">
+          Cultural Heritage Risk Monitoring Dashboard
         </h2>
-        <p data-i18n="map_subtitle">
-          Click on villages to discover their unique traditions, festivals, and
-          crafts
+        <p data-i18n="risk_subtitle">
+          Identify, calculate, and display cultural traditions, crafts, and
+          heritage items at risk of disappearing.
         </p>
-        <div class="map-controls">
-          <!-- language-switcher.js keeps this in sync with the global selector -->
-          <select id="language-selector" class="btn btn-secondary">
-            <option value="en">English</option>
-            <option value="hi">हिन्दी</option>
-            <option value="mr">मराठी</option>
-          </select>
-          <button
-            id="toggle-heatmap"
-            class="btn btn-secondary"
-            data-i18n="map_toggle_heatmap"
-          >
-            Toggle Heatmap
-          </button>
-          <button
-            id="toggle-sound"
-            class="btn btn-secondary"
-            data-i18n="map_ambient_on"
-          >
-            Ambient Sounds: ON
-          </button>
-        </div>
       </div>
 
-      <div id="map" class="map-view"></div>
+      <!-- Summary Cards -->
+      <section class="summary-deck">
+        <div class="summary-card total-card">
+          <div class="card-icon-wrapper">
+            <i class="ti ti-archive"></i>
+          </div>
+          <div class="card-details">
+            <span class="card-value" id="total-count">0</span>
+            <span class="card-label" data-i18n="total_assets"
+              >Total Cultural Assets</span
+            >
+          </div>
+        </div>
 
-      <div id="village-info" class="village-info-panel">
-        <div class="info-header">
-          <h3 id="village-name" data-i18n="map_select_village">
-            Select a Village
-          </h3>
-          <button id="close-info" class="close-btn" data-i18n="btn_close">
-            ×
-          </button>
+        <div class="summary-card high-risk-card">
+          <div class="card-icon-wrapper">
+            <i class="ti ti-alert-octagon"></i>
+          </div>
+          <div class="card-details">
+            <span class="card-value" id="high-count">0</span>
+            <span class="card-label" data-i18n="high_risk"
+              >High Risk Count</span
+            >
+          </div>
         </div>
-        <div id="info-content" class="info-content">
-          <p data-i18n="map_click_marker">
-            Click on a village marker to see details
-          </p>
+
+        <div class="summary-card medium-risk-card">
+          <div class="card-icon-wrapper">
+            <i class="ti ti-alert-triangle"></i>
+          </div>
+          <div class="card-details">
+            <span class="card-value" id="medium-count">0</span>
+            <span class="card-label" data-i18n="medium_risk"
+              >Medium Risk Count</span
+            >
+          </div>
         </div>
-      </div>
+
+        <div class="summary-card low-risk-card">
+          <div class="card-icon-wrapper">
+            <i class="ti ti-shield-check"></i>
+          </div>
+          <div class="card-details">
+            <span class="card-value" id="low-count">0</span>
+            <span class="card-label" data-i18n="low_risk">Low Risk Count</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Risk Data Presentation -->
+      <section class="assets-section">
+        <div class="assets-grid" id="assets-grid">
+          <!-- Dynamically populated card items -->
+          <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading heritage asset data...</p>
+          </div>
+        </div>
+      </section>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
       <div class="footer-container">
         <!-- Brand Section -->
@@ -188,12 +206,12 @@
 
     <!-- Back To Top Button -->
     <button id="backToTopBtn" aria-label="Back to top">↑</button>
-    <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+
+    <!-- Scripts -->
     <script src="scripts/translations.js"></script>
-    <script src="scripts/map.js"></script>
- <script src="scripts/languageSwitcher.js"></script>
+    <script src="scripts/languageSwitcher.js"></script>
     <script src="scripts/navbar.js"></script>
-     <script src="scripts/main.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/risk-dashboard.js"></script>
   </body>
 </html>
- 

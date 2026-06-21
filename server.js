@@ -13,6 +13,9 @@ const progressRoutes = require('./routes/progress.routes');
 const postRoutes = require('./routes/post.routes');
 const chatRoutes = require('./routes/chat.routes');
 const checkinRoutes = require('./routes/checkin.routes');
+const storyRoutes = require('./routes/story.routes');
+
+const store = require('./data/store');
 
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
@@ -88,6 +91,92 @@ app.use('/api/chat', chatRoutes);
 
 app.use('/api/checkin', checkinRoutes);
 
+app.use('/api/story-generator', storyRoutes);
+
+app.get('/api/reputation', (req, res, next) => {
+  try {
+    const contributors = store.contributors || [];
+    const calculated = contributors.map((c) => {
+      const score =
+        (c.stories || 0) * 20 +
+        (c.photos || 0) * 10 +
+        (c.culturalItems || 0) * 30 +
+        (c.checkins || 0) * 5 +
+        (c.quests || 0) * 15;
+
+      let badge = 'Heritage Explorer';
+      if (score >= 400) {
+        badge = 'Heritage Guardian';
+      } else if (score >= 250) {
+        badge = 'Cultural Archivist';
+      } else if (score >= 100) {
+        badge = 'Story Collector';
+      }
+
+      return {
+        id: c.id,
+        name: c.name,
+        stories: c.stories || 0,
+        photos: c.photos || 0,
+        culturalItems: c.culturalItems || 0,
+        checkins: c.checkins || 0,
+        quests: c.quests || 0,
+        score,
+        badge,
+        memberSince: c.memberSince,
+      };
+    });
+
+    // Sort by score descending
+    calculated.sort((a, b) => b.score - a.score);
+
+    res.json(calculated);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/timeline', (req, res, next) => {
+  try {
+    let events = store.timelineEvents || [];
+
+    if (req.query.item) {
+      const itemFilter = req.query.item.toLowerCase();
+      events = events.filter((e) => e.item.toLowerCase() === itemFilter);
+    }
+
+    if (req.query.type) {
+      const typeFilter = req.query.type.toLowerCase();
+      events = events.filter((e) => e.type.toLowerCase() === typeFilter);
+    }
+
+    res.json(events);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/api/risk-dashboard', (req, res, next) => {
+  try {
+    const items = store.culturalItems || [];
+    const responseData = items.map((item) => ({
+      name: item.title,
+      location: item.location,
+      artisans: item.artisans !== undefined ? item.artisans : 5,
+      records: item.records !== undefined ? item.records : 3,
+      lastUpdated:
+        item.lastUpdated ||
+        (item.timestamp
+          ? item.timestamp.split('T')[0]
+          : new Date().toISOString().split('T')[0]),
+      engagement: item.engagement !== undefined ? item.engagement : 50,
+    }));
+    res.json(responseData);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.get('/api/map-style', async (req, res) => {
   if (!process.env.MAPTILER_KEY) {
     return res.status(503).json({
@@ -126,12 +215,7 @@ app.use(notFound);
 // Error Middleware
 app.use(errorHandler);
 
-//map key
 
-//custom 404 route
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, './public', '404.html'));
-});
 
 // Start Server
 app.listen(PORT, () => {
