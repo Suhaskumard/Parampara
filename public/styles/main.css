@@ -69,20 +69,19 @@ body>* {
 /* ===== NAVIGATION ===== */
 .navbar {
   background: rgba(90, 40, 10, 0.97);
-  padding: 0 2rem;
+  padding:1.5rem 2rem;
   position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 16px rgba(45, 24, 16, 0.5);
   border-bottom: 2px solid var(--accent-color);
-  height: 64px;
+min-height: 64px;
   display: flex;
   align-items: center;
 }
 
 .nav-container {
   max-width: 1400px;
-  height: 64px;
   width: 100%;
   margin: 0 auto;
   padding: 0;
@@ -840,7 +839,7 @@ body>* {
 @media (max-width: 1120px) {
   .navbar {
     height: fit-content;
-    padding: 0.75rem 0;
+      padding: 1.25rem 1.5rem;
   }
 
   .nav-container {
@@ -863,7 +862,7 @@ body>* {
 @media (max-width: 920px) {
   .navbar {
     height: auto;
-    padding: 0.75rem 1.5rem;
+    padding: 1.25rem 1.5rem;
   }
 
   .nav-container {
