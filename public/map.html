@@ -9,6 +9,7 @@
     />
     <title>Cultural Map - Parampara</title>
     <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/livingHeritageBadge.css" />
     <link rel="stylesheet" href="styles/map.css" />
 
     <link
@@ -67,6 +68,12 @@
             >
           </li>
           <li>
+            <a href="revival.html"
+              ><i class="ti ti-hourglass"></i>
+              <span data-i18n="nav_revival">Lost Traditions</span></a
+            >
+          </li>
+          <li>
             <a href="risk-dashboard.html"
               ><i class="ti ti-alert-triangle"></i>
               <span data-i18n="nav_risk">Risk Dashboard</span></a
@@ -110,13 +117,17 @@
             <option value="hi">हिन्दी</option>
             <option value="mr">मराठी</option>
           </select>
-          <button
-            id="toggle-heatmap"
-            class="btn btn-secondary"
-            data-i18n="map_toggle_heatmap"
-          >
-            Toggle Heatmap
-          </button>
+            <button
+              id="toggle-heatmap"
+              class="btn btn-secondary"
+              data-i18n="map_toggle_heatmap"
+            >
+              Toggle Heatmap
+            </button>
+            <label class="heritage-toggle" style="margin-left:1rem;">
+              <input type="checkbox" id="toggle-heritage-health" />
+              <span data-i18n="map_toggle_heritage">Heritage Health View</span>
+            </label>
           <button
             id="toggle-sound"
             class="btn btn-secondary"
@@ -158,6 +169,7 @@
     <button id="backToTopBtn" aria-label="Back to top">↑</button>
     <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
     <script src="scripts/translations.js"></script>
+    <script src="scripts/heritageScoreUtil.js"></script>
     <script src="scripts/map.js"></script>
     <script src="scripts/languageSwitcher.js"></script>
     <script src="scripts/navbar.js"></script>
