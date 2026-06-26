@@ -400,10 +400,9 @@ function pathDesc(path) {
 // ─────────────────────────────────────────────────────────────────────────────
 async function loadItems() {
   try {
-    const response = await fetch('/api/items?limit=1000');
+    const response = await fetch('/api/items');
     if (!response.ok) throw new Error('API error');
-    const result = await response.json();
-    allItems = result.data || result;
+    allItems = await response.json();
   } catch (error) {
     console.error('Error loading items, using samples:', error);
     allItems = getSampleItems();

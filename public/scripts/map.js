@@ -268,6 +268,7 @@ async function initializeMap() {
       addVillageMarkers();
       await loadCulturalItems();
       checkFlyover();
+      initRouting();
     });
 
     map.on('error', (event) => {
@@ -831,3 +832,4 @@ function calculateBearing(startLat, startLng, destLat, destLng) {
   brng = brng * 180 / Math.PI;
   return (brng + 360) % 360;
 }
+// --- Heritage Path Routing ---
