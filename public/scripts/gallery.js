@@ -193,8 +193,8 @@ function getEmptyStateHtml() {
 }
 
 // Re-render on language change
-window.addEventListener('parampara:langchange', () => {
-  displayItems(allItems, false);
+window.addEventListener('parampara:langchange', async () => {
+  displayItems(await getCurrentFilteredItems());
 });
 
 function displayItems(items, append = false) {
@@ -275,10 +275,40 @@ function getTypeIcon(type) {
   return icons[type] || '📄';
 }
 
-function filterItems() {
+async function getCurrentFilteredItems() {
+  const searchTerm = document.getElementById('search-input').value.toLowerCase();
+  const typeFilter = document.getElementById('type-filter').value;
+
+  const galleryGrid = document.getElementById('gallery-grid');
+  if (galleryGrid) {
+    galleryGrid.style.opacity = '0.5';
+  }
+
+  try {
+    const filtered = await window.dataWorker.runJob('filterGalleryItems', {
+      items: allItems,
+      typeFilter,
+      searchTerm
+    });
+
+    return filtered;
+  } catch (error) {
+    console.error('Worker filter error:', error);
+    return allItems;
+  } finally {
+    if (galleryGrid) {
+      galleryGrid.style.opacity = '1';
+    }
+  }
+}
+
+async function filterItems() {
   currentPage = 1;
   hasMore = true;
-  loadGalleryItems(currentPage, false);
+
+  const filtered = await getCurrentFilteredItems();
+  displayItems(filtered);
+}
 }
 
 async function handleAddItem(e) {
