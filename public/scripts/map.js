@@ -9,6 +9,13 @@ let heatmapMarkers = [];
 
 let currentLanguage = localStorage.getItem('language') || 'en';
 
+// Flyover state
+let flyoverActive = false;
+let flyoverPaused = false;
+let flyoverCoordinates = [];
+let flyoverIndex = 0;
+let flyoverTimeout = null;
+
 document.addEventListener('DOMContentLoaded', () => {
   const selector = document.getElementById('language-selector');
   selector.value = currentLanguage;
@@ -256,10 +263,11 @@ async function initializeMap() {
 
     map.addControl(new maplibregl.NavigationControl());
 
-    map.on('load', () => {
+    map.on('load', async () => {
       setMapLanguage(currentLanguage);
       addVillageMarkers();
-      loadCulturalItems();
+      await loadCulturalItems();
+      checkFlyover();
     });
 
     map.on('error', (event) => {
@@ -544,13 +552,14 @@ async function loadCulturalItems() {
   }
 
   try {
-    const response = await fetch('/api/items');
+    const response = await fetch('/api/items?limit=1000');
 
     if (!response.ok) {
       throw new Error('Failed to load cultural items');
     }
 
-    const items = await response.json();
+    const result = await response.json();
+    const items = result.data || result; // handle paginated or flat array
 
     items.forEach((item) => {
       if (item.coordinates && item.coordinates.length === 2) {
@@ -641,3 +650,184 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ── Cinematic Flyover Logic ──────────────────────────────────────────────────
+async function checkFlyover() {
+  const params = new URLSearchParams(window.location.search);
+  const flyoverId = params.get('flyover');
+  if (!flyoverId) return;
+
+  try {
+    const response = await fetch('/api/paths');
+    const paths = await response.json();
+    const targetPath = paths.find(p => p.id === flyoverId);
+
+    if (!targetPath || !targetPath.items || targetPath.items.length === 0) {
+      console.warn('Flyover path not found or empty');
+      return;
+    }
+
+    const itemsRes = await fetch('/api/items?limit=1000');
+    const itemsData = await itemsRes.json();
+    const allItems = itemsData.data || itemsData; // Support paginated response if backend uses it
+
+    flyoverCoordinates = targetPath.items.map(itemId => {
+      const item = allItems.find(i => i.id === itemId);
+      return item && item.coordinates && item.coordinates.length === 2 ? [item.coordinates[1], item.coordinates[0]] : null;
+    }).filter(c => c !== null);
+
+    if (flyoverCoordinates.length < 2) {
+      console.warn('Not enough coordinates for flyover');
+      return;
+    }
+
+    startFlyover();
+  } catch (err) {
+    console.error('Error starting flyover:', err);
+  }
+}
+
+function startFlyover() {
+  flyoverActive = true;
+  flyoverPaused = false;
+  flyoverIndex = 0;
+
+  // Add route layer
+  if (!map.getSource('flyover-route')) {
+    map.addSource('flyover-route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: flyoverCoordinates
+        }
+      }
+    });
+
+    map.addLayer({
+      id: 'flyover-route-line',
+      type: 'line',
+      source: 'flyover-route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': '#e53e3e',
+        'line-width': 4,
+        'line-dasharray': [2, 4]
+      }
+    });
+  }
+
+  // Show UI
+  const controls = document.getElementById('flyover-controls');
+  if (controls) controls.style.display = 'flex';
+  
+  const pauseBtn = document.getElementById('btn-flyover-pause');
+  const stopBtn = document.getElementById('btn-flyover-stop');
+  if (pauseBtn) {
+    pauseBtn.textContent = 'Pause';
+    pauseBtn.addEventListener('click', toggleFlyoverPause);
+  }
+  if (stopBtn) stopBtn.addEventListener('click', stopFlyover);
+
+  flyToNextPoint();
+}
+
+function toggleFlyoverPause() {
+  flyoverPaused = !flyoverPaused;
+  const btn = document.getElementById('btn-flyover-pause');
+  if (flyoverPaused) {
+    if (btn) btn.textContent = 'Resume';
+    map.stop(); // Stop camera animation
+    if (flyoverTimeout) clearTimeout(flyoverTimeout);
+  } else {
+    if (btn) btn.textContent = 'Pause';
+    flyToNextPoint();
+  }
+}
+
+function stopFlyover() {
+  flyoverActive = false;
+  if (flyoverTimeout) clearTimeout(flyoverTimeout);
+  map.stop();
+  map.easeTo({ pitch: 0, bearing: 0 });
+  
+  if (map.getLayer('flyover-route-line')) map.removeLayer('flyover-route-line');
+  if (map.getSource('flyover-route')) map.removeSource('flyover-route');
+  
+  const controls = document.getElementById('flyover-controls');
+  if (controls) controls.style.display = 'none';
+  
+  // Remove pause/stop event listeners to avoid duplicates if run again
+  const pauseBtn = document.getElementById('btn-flyover-pause');
+  const stopBtn = document.getElementById('btn-flyover-stop');
+  if (pauseBtn) pauseBtn.removeEventListener('click', toggleFlyoverPause);
+  if (stopBtn) stopBtn.removeEventListener('click', stopFlyover);
+  
+  // Remove flyover param from URL
+  const url = new URL(window.location);
+  url.searchParams.delete('flyover');
+  window.history.replaceState({}, '', url);
+}
+
+function flyToNextPoint() {
+  if (!flyoverActive || flyoverPaused) return;
+
+  if (flyoverIndex >= flyoverCoordinates.length) {
+    // End of route
+    stopFlyover();
+    return;
+  }
+
+  const target = flyoverCoordinates[flyoverIndex];
+  
+  // Calculate bearing to next point for cinematic effect
+  let bearing = 0;
+  if (flyoverIndex < flyoverCoordinates.length - 1) {
+    const next = flyoverCoordinates[flyoverIndex + 1];
+    bearing = calculateBearing(target[1], target[0], next[1], next[0]);
+  } else if (flyoverIndex > 0) {
+    const prev = flyoverCoordinates[flyoverIndex - 1];
+    bearing = calculateBearing(prev[1], prev[0], target[1], target[0]);
+  }
+
+  map.flyTo({
+    center: target,
+    zoom: 9,
+    pitch: 60,
+    bearing: bearing,
+    speed: 0.3, // slow cinematic speed
+    curve: 1,
+    essential: true
+  });
+
+  // When move ends, wait a bit and go to next
+  map.once('moveend', () => {
+    if (!flyoverActive || flyoverPaused) return;
+    
+    // Increment index and schedule next flight
+    flyoverIndex++;
+    flyoverTimeout = setTimeout(() => {
+      flyToNextPoint();
+    }, 3000); // 3 second pause at each point to let user look around
+  });
+}
+
+function calculateBearing(startLat, startLng, destLat, destLng) {
+  startLat = startLat * Math.PI / 180;
+  startLng = startLng * Math.PI / 180;
+  destLat = destLat * Math.PI / 180;
+  destLng = destLng * Math.PI / 180;
+
+  const y = Math.sin(destLng - startLng) * Math.cos(destLat);
+  const x = Math.cos(startLat) * Math.sin(destLat) -
+            Math.sin(startLat) * Math.cos(destLat) * Math.cos(destLng - startLng);
+  
+  let brng = Math.atan2(y, x);
+  brng = brng * 180 / Math.PI;
+  return (brng + 360) % 360;
+}
