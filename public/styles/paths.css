@@ -1,22 +1,5 @@
 /* Heritage Paths Page Styles */
 
-/* ── Root Variables Override for Dark Theme ─────────────────────────────── */
-:root {
-  --text-light: #ffffff;
-  --text-light-muted: #e0e0e0;
-  --text-light-dim: #b0b0b0;
-  --bg-dark-card: #1e1e1e;
-  --bg-dark-input: #2a2a2a;
-  --bg-dark-hover: #333333;
-  --border-dark: #555555;
-}
-
-/* ── General Dark Theme Fixes ────────────────────────────────────────────── */
-body {
-  background-color: #121212 !important;
-  color: var(--text-light) !important;
-}
-
 /* ── Filter & Sort Toolbar ────────────────────────────────────────────────── */
 
 .paths-controls {
@@ -25,10 +8,10 @@ body {
   align-items: flex-end;
   gap: 1rem 1.5rem;
   padding: 1.25rem 1.5rem;
-  background: var(--bg-dark-card, #1e1e1e);
-  border: 2px solid var(--accent-color, #8b6914);
-  border-radius: var(--border-radius, 12px);
-  box-shadow: var(--shadow, 0 4px 12px rgba(0,0,0,0.5));
+  background: var(--card-bg);
+  border: 2px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
 }
 
 .control-group {
@@ -43,39 +26,34 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
+  color: var(--text-muted, #888);
 }
 
 .control-group select {
   appearance: none;
   -webkit-appearance: none;
   padding: 0.55rem 2.2rem 0.55rem 0.85rem;
-  border: 2px solid var(--accent-color, #8b6914);
+  border: 2px solid var(--accent-color);
   border-radius: 8px;
-  background: var(--bg-dark-input, #2a2a2a) !important;
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
+  background: var(--card-bg);
+  color: var(--text-dark);
   font-size: 0.95rem;
   font-family: inherit;
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e0e0e0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b4e3d' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.control-group select option {
-  background: var(--bg-dark-card, #1e1e1e) !important;
-  color: var(--text-light, #ffffff) !important;
-}
-
 .control-group select:hover {
-  border-color: var(--terracotta, #b25a3e);
+  border-color: var(--terracotta);
 }
 
 .control-group select:focus {
   outline: none;
-  border-color: var(--terracotta, #b25a3e);
-  box-shadow: 0 0 0 3px rgba(178, 90, 62, 0.3);
+  border-color: var(--terracotta);
+  box-shadow: 0 0 0 3px rgba(178, 90, 62, 0.2);
 }
 
 /* Active filters area (badges + clear button) */
@@ -100,7 +78,7 @@ body {
   padding: 0.3rem 0.7rem;
   border-radius: 20px;
   background: linear-gradient(135deg, var(--terracotta, #b25a3e), var(--clay-orange, #c97b4b));
-  color: #ffffff !important;  /* FIX: white text */
+  color: #fff;
   font-size: 0.82rem;
   font-weight: 600;
   animation: badgePop 0.2s ease;
@@ -114,7 +92,7 @@ body {
 .filter-badge button {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
@@ -123,14 +101,14 @@ body {
 }
 
 .filter-badge button:hover {
-  color: #ffffff !important;
+  color: #fff;
 }
 
 /* Ghost / secondary button variant for Clear All */
 .btn-ghost {
-  background: transparent !important;
-  border: 2px solid var(--accent-color, #8b6914);
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
+  background: transparent;
+  border: 2px solid var(--accent-color);
+  color: var(--text-dark);
   padding: 0.45rem 1rem;
   border-radius: 8px;
   font-size: 0.88rem;
@@ -141,17 +119,17 @@ body {
 }
 
 .btn-ghost:hover {
-  background: var(--terracotta, #b25a3e) !important;
-  border-color: var(--terracotta, #b25a3e) !important;
-  color: #ffffff !important;
+  background: var(--terracotta, #b25a3e);
+  border-color: var(--terracotta, #b25a3e);
+  color: #fff;
 }
 
 /* Results count */
 .paths-results-count {
   font-size: 0.9rem;
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
+  color: var(--text-muted, #888);
   font-weight: 500;
-  margin: -1rem 0 0.5rem;
+  margin: -1rem 0 0.5rem;   /* pulls up slightly under toolbar */
   min-height: 1.2em;
 }
 
@@ -159,7 +137,7 @@ body {
 .paths-empty {
   text-align: center;
   padding: 3rem;
-  color: var(--text-light-muted, #e0e0e0) !important;
+  color: var(--text-muted);
   grid-column: 1 / -1;
 }
 
@@ -173,7 +151,6 @@ body {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--text-light, #ffffff) !important;
 }
 
 /* ── Responsive tweaks ────────────────────────────────────────────────────── */
@@ -203,7 +180,6 @@ body {
   }
 }
 
-/* ── Main Container ───────────────────────────────────────────────────────── */
 
 .paths-container {
   padding: 2rem;
@@ -219,35 +195,35 @@ body {
 }
 
 .paths-header h2 {
-  color: var(--text-light, #ffffff) !important;  /* FIX: white heading */
+  color: var(--earth-brown);
   margin-bottom: 1rem;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  text-shadow:
+    3px 3px 6px rgba(45, 24, 16, 0.7),
+    1px 1px 3px rgba(0, 0, 0, 0.3);
   font-weight: bold;
   letter-spacing: 1px;
-  font-size: 3rem;
+  font-size: 3rem; /* was 2.5rem */
   line-height: 1.3;
 }
 
 .paths-header p {
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
+  color: var(--earth-brown);
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  font-weight: 500;
+  text-shadow: 2px 2px 4px rgba(45, 24, 16, 0.6);
+  font-weight: 600;
 }
-
-/* ── Filter Bar (legacy, keeping for compatibility) ────────────────────── */
 
 .paths-filter-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   align-items: flex-end;
-  background: var(--bg-dark-card, #1e1e1e);
+  background: var(--card-bg);
   padding: 1.5rem;
-  border-radius: var(--border-radius, 12px);
-  box-shadow: var(--shadow, 0 4px 12px rgba(0,0,0,0.5));
-  border: 2px solid var(--accent-color, #8b6914);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  border: 2px solid var(--accent-color);
   margin-bottom: 2rem;
 }
 
@@ -261,30 +237,23 @@ body {
 
 .filter-group label {
   font-weight: bold;
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
+  color: var(--earth-brown);
 }
 
 .filter-group input,
 .filter-group select {
   padding: 0.8rem;
-  border: 1px solid var(--accent-color, #8b6914);
-  border-radius: var(--border-radius, 8px);
-  background: var(--bg-dark-input, #2a2a2a) !important;
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
+  border: 1px solid var(--accent-color);
+  border-radius: var(--border-radius);
+  background: rgba(255, 255, 255, 0.8);
   font-family: inherit;
   font-size: 1rem;
-}
-
-.filter-group input::placeholder {
-  color: var(--text-light-dim, #b0b0b0) !important;
 }
 
 .paths-filter-bar .btn {
   padding: 0.8rem 1.5rem;
   height: fit-content;
 }
-
-/* ── Path Cards Grid ──────────────────────────────────────────────────────── */
 
 .paths-list {
   max-height: 600px;
@@ -295,28 +264,28 @@ body {
   grid-template-columns: repeat(3, 1fr);
 }
 
-.paths-list::-webkit-scrollbar {
-  background: transparent;
+.paths-list::-webkit-scrollbar{
+background: transparent;
 }
 
-.paths-list::-webkit-scrollbar-track {
+.paths-list::-webkit-scrollbar-track{
   background: transparent;
 }
 
 .path-card {
-  background: var(--bg-dark-card, #1e1e1e) !important;
+  background: var(--card-bg);
   padding: 2rem;
-  border-radius: var(--border-radius, 12px);
-  box-shadow: var(--shadow, 0 4px 12px rgba(0,0,0,0.5));
-  transition: var(--transition, all 0.3s ease);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
   cursor: pointer;
-  border: 2px solid var(--accent-color, #8b6914);
+  border: 2px solid var(--accent-color);
 }
 
 .path-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-  border-color: var(--terracotta, #b25a3e);
+  box-shadow: 0 8px 16px rgba(61, 47, 31, 0.4);
+  border-color: var(--terracotta);
 }
 
 .path-card-header {
@@ -327,7 +296,7 @@ body {
 }
 
 .path-card h3 {
-  color: var(--text-light, #ffffff) !important;  /* FIX: white title */
+  color: var(--text-strong);
   font-size: 1.6rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
@@ -336,32 +305,30 @@ body {
 .path-card-theme {
   display: inline-block;
   padding: 0.35rem 0.85rem;
-  background: var(--field-green, #2d7d46);
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
+  background: var(--field-green);
+  color: var(--warm-beige);
   border-radius: 20px;
   font-size: 0.9rem;
   margin-bottom: 1rem;
   font-weight: 600;
-  border: 2px solid var(--success, #2e7d32);
+  border: 2px solid var(--success);
 }
 
 .path-card p {
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
+  color: var(--text-dark);
   margin-bottom: 1rem;
-  font-weight: 400;
-  font-size: 1.1rem;
+  font-weight: 500;
+  font-size: 1.1rem; 
   line-height: 1.9;
 }
 
 .path-card-stats {
   display: flex;
   gap: 2rem;
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
+  color: var(--text-strong);
   font-size: 1rem;
   font-weight: 600;
 }
-
-/* ── Path Player Modal ────────────────────────────────────────────────────── */
 
 .path-player {
   max-width: 800px;
@@ -374,31 +341,26 @@ body {
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(107, 78, 61, 0.3);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 0.5rem;
-  border: 1px solid var(--accent-color, #8b6914);
+  border: 1px solid var(--accent-color);
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--terracotta, #b25a3e), var(--clay-orange, #c97b4b));
+  background: linear-gradient(90deg, var(--terracotta), var(--clay-orange));
   transition: width 0.3s ease;
-}
-
-#path-progress-text {
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
 }
 
 .path-content {
   min-height: 400px;
   padding: 2rem;
-  background: rgba(30, 30, 30, 0.8) !important;
-  border-radius: var(--border-radius, 12px);
+  background: rgba(212, 165, 116, 0.1);
+  border-radius: var(--border-radius);
   margin-bottom: 2rem;
-  border: 2px solid var(--accent-color, #8b6914);
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
+  border: 2px solid var(--accent-color);
 }
 
 .path-step {
@@ -409,22 +371,22 @@ body {
   width: 100%;
   max-height: 300px;
   object-fit: cover;
-  border-radius: var(--border-radius, 8px);
+  border-radius: var(--border-radius);
   margin-bottom: 1.5rem;
 }
 
 .path-step h4 {
-  color: var(--text-light, #ffffff) !important;  /* FIX: white heading */
+  color: var(--text-strong);
   font-size: 1.6rem;
   margin-bottom: 1rem;
   font-weight: bold;
 }
 
 .path-step p {
-  color: var(--text-light-muted, #e0e0e0) !important;  /* FIX: light text */
+  color: var(--text-dark);
   line-height: 1.8;
   margin-bottom: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 1rem;
 }
 
@@ -445,40 +407,9 @@ body {
   gap: 1rem;
 }
 
-.path-controls button {
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
-}
-
 .path-controls button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* ── Buttons ────────────────────────────────────────────────────────────────── */
-
-.btn {
-  color: var(--text-light, #ffffff) !important;  /* FIX: white text */
-}
-
-.btn-primary {
-  background: var(--terracotta, #b25a3e) !important;
-  border: 2px solid var(--terracotta, #b25a3e) !important;
-  color: #ffffff !important;
-}
-
-.btn-primary:hover {
-  background: #8a4529 !important;
-  border-color: #8a4529 !important;
-}
-
-.btn-secondary {
-  background: var(--bg-dark-input, #2a2a2a) !important;
-  border: 2px solid var(--accent-color, #8b6914) !important;
-  color: var(--text-light, #ffffff) !important;
-}
-
-.btn-secondary:hover {
-  background: var(--bg-dark-hover, #333333) !important;
 }
 
 #create-path-btn {
@@ -486,79 +417,7 @@ body {
   margin: 0 auto;
 }
 
-/* ── Modal Styles ──────────────────────────────────────────────────────────── */
-
-.modal {
-  background: rgba(0, 0, 0, 0.8) !important;
-}
-
-.modal-content {
-  background: var(--bg-dark-card, #1e1e1e) !important;
-  color: var(--text-light, #ffffff) !important;
-  border: 2px solid var(--accent-color, #8b6914);
-}
-
-.modal-header h3 {
-  color: var(--text-light, #ffffff) !important;
-}
-
-.close-btn {
-  color: var(--text-light, #ffffff) !important;
-}
-
-.close-btn:hover {
-  color: #ff6b6b !important;
-}
-
-.modal-form .form-group label {
-  color: var(--text-light-muted, #e0e0e0) !important;
-}
-
-.modal-form .form-group input,
-.modal-form .form-group textarea {
-  background: var(--bg-dark-input, #2a2a2a) !important;
-  color: var(--text-light, #ffffff) !important;
-  border: 1px solid var(--accent-color, #8b6914);
-}
-
-.modal-form .form-group input::placeholder,
-.modal-form .form-group textarea::placeholder {
-  color: var(--text-light-dim, #b0b0b0) !important;
-}
-
-.items-selector {
-  color: var(--text-light-muted, #e0e0e0) !important;
-}
-
-/* ── Footer Fix ────────────────────────────────────────────────────────────── */
-
-.footer {
-  background: var(--bg-dark-card, #1e1e1e) !important;
-  color: var(--text-light-muted, #e0e0e0) !important;
-}
-
-.footer-logo {
-  color: var(--text-light, #ffffff) !important;
-}
-
-.footer-links h3 {
-  color: var(--text-light, #ffffff) !important;
-}
-
-.footer-links ul li a {
-  color: var(--text-light-muted, #e0e0e0) !important;
-}
-
-.footer-links ul li a:hover {
-  color: var(--text-light, #ffffff) !important;
-}
-
-.footer-bottom p {
-  color: var(--text-light-dim, #b0b0b0) !important;
-}
-
-/* ── Fix: Remove extra space below footer ────────────────────────────────── */
-
+/* Fix: Remove extra space below footer */
 html,
 body {
   margin: 0;
@@ -576,8 +435,7 @@ main.paths-container {
   flex: 1;
 }
 
-/* ── Back To Top Button ───────────────────────────────────────────────────── */
-
+/* Back To Top Button */
 #backToTopBtn {
   position: fixed;
   bottom: 2rem;
@@ -586,39 +444,51 @@ main.paths-container {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid var(--mustard, #daa520);
-  background: var(--earth-brown, #2c1810);
-  color: var(--wheat-yellow, #f5deb3) !important;
+  border: 2px solid var(--mustard);
+  background: var(--earth-brown);
+  color: var(--wheat-yellow);
   font-size: 1.4rem;
   font-weight: bold;
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, background 0.3s ease;
-  box-shadow: 0 0 0 0 rgba(218, 165, 32, 0.6), var(--shadow, 0 4px 12px rgba(0,0,0,0.5));
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0.3s ease,
+    background 0.3s ease;
+  box-shadow:
+    0 0 0 0 rgba(218, 165, 32, 0.6),
+    var(--shadow);
 }
 
+/* Show Button */
 #backToTopBtn.show {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
+/* Hover Effect */
 #backToTopBtn:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
 }
 
+/* Click Effect */
 #backToTopBtn:active {
   transform: scale(0.95);
 }
 
+/* Mobile Responsive */
 @media (max-width: 768px) {
   #backToTopBtn {
     width: 48px;
     height: 48px;
+
     bottom: 20px;
     right: 20px;
+
     font-size: 1.2rem;
   }
 }
@@ -631,16 +501,17 @@ main.paths-container {
   width: 55px;
   height: 55px;
   border: none;
-  color: #8b4513 !important;
+  color: #8b4513;
   cursor: pointer;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25), 0 0 12px rgba(205, 133, 63, 0.4);
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.25),
+    0 0 12px rgba(205, 133, 63, 0.4);
 }
-
-/* ── Responsive Grid ──────────────────────────────────────────────────────── */
-
 @media (max-width: 1023px) {
   .paths-list {
     grid-template-columns: repeat(2, 1fr);
@@ -652,3 +523,80 @@ main.paths-container {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================
+   FIX: Modal Label Visibility (Issue #350)
+   ============================================ */
+
+
+#create-path-modal .form-group label,
+#create-path-modal label {
+    color: #f0e6d8 !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    display: block !important;
+    margin-bottom: 0.4rem !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+    letter-spacing: 0.03em;
+}
+
+/* Form inputs inside modal */
+#create-path-modal .form-group input,
+#create-path-modal .form-group textarea {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+#create-path-modal .form-group input:focus,
+#create-path-modal .form-group textarea:focus {
+    border-color: var(--terracotta, #b25a3e) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(178, 90, 62, 0.2);
+} 
+
+/* Placeholder text */
+#create-path-modal .form-group input::placeholder,
+#create-path-modal .form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-weight: 300;
+}
+
+/* Items selector */
+#create-path-modal .items-selector {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 1rem !important;
+    min-height: 80px;
+    color: #e8ddd0;
+}
+
+/* Modal header */
+#create-path-modal .modal-header h3 {
+    color: #f5f0eb !important;
+}
+
+#create-path-modal .close-btn {
+    color: #f5f0eb !important;
+}
+
+/* Create Path button */
+#create-path-modal .btn-primary {
+    background: var(--terracotta, #b25a3e) !important;
+    border: none !important;
+    padding: 0.75rem 2rem !important;
+    font-weight: 600 !important;
+    margin-top: 0.5rem;
+}
+
+#create-path-modal .btn-primary:hover {
+    background: #9a4d33 !important;
+    transform: translateY(-2px);
+}  
