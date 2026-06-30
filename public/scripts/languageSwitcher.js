@@ -170,6 +170,7 @@ console.log("Current dict:", dict);
     try {
       const data = await window.CacheManager.get('/api/translations');
       window.PARAMPARA_TRANSLATIONS = data.PARAMPARA_TRANSLATIONS ?? data;
+      window.translations = data.translations;
     } catch (error) {
       console.error('Parampara: failed to load translations', error);
       return;

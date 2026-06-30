@@ -87,6 +87,11 @@ async function loadVillagePosts() {
 
 function renderPosts(container, posts, isDummy) {
   const lang = localStorage.getItem("parampara_lang") || "en";
+  
+  if (typeof translations === 'undefined' || !translations[lang]) {
+    console.warn("Translations not loaded yet, skipping renderPosts");
+    return;
+  }
   const tr = translations[lang];
 
   container.innerHTML = posts
@@ -167,7 +172,11 @@ function handleNewVillagePost(post) {
   if (!postsGrid) return;
 
   const lang = localStorage.getItem("parampara_lang") || "en";
-  const tr = translations[lang] || {};
+  
+  if (typeof translations === 'undefined' || !translations[lang]) {
+    return;
+  }
+  const tr = translations[lang];
   
   const postHtml = `
     <div class="post-card new-post" style="opacity: 0; transform: translateY(-20px); transition: all 0.5s ease;">
